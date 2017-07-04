@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -8,7 +10,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -18,6 +20,135 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+}
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'lazy-framework'
+
+    publishedGroupId = 'com.robin.lazy.framework'
+    libraryName = 'LazyFramework'
+    artifact = 'lazy-framework'
+
+    libraryDescription = 'this is android framework'
+
+    siteUrl = 'https://github.com/Robin-jiangyufeng/LazyFrameworkForAndroid'
+    gitUrl = 'https://github.com/Robin-jiangyufeng/LazyFrameworkForAndroid.git'
+
+    libraryVersion = '0.0.1'
+
+    developerId = 'jiangyufeng'
+    developerName = 'jiangyufeng'
+    developerEmail = '429257411@qq.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+def siteUrl = ext.siteUrl
+def gitUrl = ext.gitUrl
+
+version = ext.libraryVersion
+group = ext.publishedGroupId
+
+//打包模块,在上传到jcenter时(执行gradle bintrayUpload命)需要删除此模块
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                groupId publishedGroupId
+                artifactId artifact
+
+                // Add your description here
+                name libraryName
+                description libraryDescription
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id developerId
+                        name developerName
+                        email developerEmail
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    //读取Bintray帐号和密码。
+    //一般的为了保密和安全性，在项目的local.properties文件中添加两行句话即可：
+    //bintray.user=username
+    //bintray.apikey=apikey
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+        repo = bintrayRepo//自己创建的仓库名字
+        name = bintrayName//上传到JCenter的名字,最终引用的名字
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses//不能随便写，只能是仓库创建时选择的license type
+//        userOrg = 'robin' //自己创建的organization名称
+        publish = true // 是否是公开项目，公开别人可以引用
+//        publicDownloadNumbers = true
+//        version {
+//            desc = libraryDescription
+//            gpg {
+//                sign = true //Determines whether to GPG sign the files. The default is false
+//                passphrase = properties.getProperty("bintray.gpg.password")
+//                //Optional. The passphrase for GPG signing'
+//            }
+//        }
+    }
+}
+
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+task javadoc(type: Javadoc) {
+    failOnError false //必须添加以免出错
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+javadoc {
+    options{
+        //如果你的项目里面有中文注释的话，必须将格式设置为UTF-8，不然会出现乱码
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        author true
+        version true
+        links "http://docs.oracle.com/javase/7/docs/api"
     }
 }
 
