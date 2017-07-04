@@ -198,6 +198,13 @@ public abstract class LazyFragment extends Fragment
         if (isFirstResume) {
             isFirstResume = false;
         }
+        if (isPrepared) {
+            if (isVisible()) {
+                onVisible();
+            } else {
+                onInvisible();
+            }
+        }
     }
 
     @Override

@@ -469,6 +469,33 @@ public abstract class LazyDialogFragment extends DialogFragment
         return null;
     }
 
+    /***
+     * 开启退出activity的动画
+     */
+    protected void openExitTransition() {
+        Activity activity=getActivity();
+        if(activity instanceof LazyAppCompatActivity){
+            ((LazyAppCompatActivity) activity).setOpenExitTransition(true);
+        }
+    }
+
+    /**
+     * finish掉当前activity
+     */
+    protected void finishActivity(){
+        if(getActivity()!=null&&!getActivity().isFinishing()){
+            getActivity().finish();
+        }
+    }
+
+    /**
+     * finish掉当前activity(带动画效果的)
+     */
+    protected void finishActivityAfterTransition(){
+        openExitTransition();
+        finishActivity();
+    }
+
     /**
      * 根据id查找view
      *
