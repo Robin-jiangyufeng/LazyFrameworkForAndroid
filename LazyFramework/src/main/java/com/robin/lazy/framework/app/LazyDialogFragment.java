@@ -71,6 +71,9 @@ public abstract class LazyDialogFragment extends DialogFragment
      */
     private boolean isPrepared;
 
+    /**是否第一次创建view*/
+    private boolean isFirstViewCreated=true;
+
     private Bundle bundle;
 
     @Override
@@ -106,8 +109,11 @@ public abstract class LazyDialogFragment extends DialogFragment
         super.onViewCreated(view, savedInstanceState);
         initView(savedInstanceState);
         isPrepared = true;
-        if (mComponentContainer != null) {
+        if (mComponentContainer != null&&!isFirstViewCreated) {
             mComponentContainer.onBecomesVisibleFromTotallyInvisible();
+        }
+        if(isFirstViewCreated){
+            isFirstViewCreated=false;
         }
     }
 
