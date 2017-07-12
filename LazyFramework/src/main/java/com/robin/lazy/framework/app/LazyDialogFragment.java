@@ -71,11 +71,6 @@ public abstract class LazyDialogFragment extends DialogFragment
      */
     private boolean isPrepared;
 
-    /**
-     * 是否第一次执行onResume()方法
-     */
-    private boolean isFirstResume = true;
-
     private Bundle bundle;
 
     @Override
@@ -210,14 +205,6 @@ public abstract class LazyDialogFragment extends DialogFragment
     public void onResume() {
         LazyLogger.d(" DialogFragment.onResume() invoked!!");
         super.onResume();
-        if (!isFirstResume) {
-            if (mComponentContainer != null) {
-                mComponentContainer.onBecomesVisibleFromPartiallyInvisible();
-            }
-        }
-        if (isFirstResume) {
-            isFirstResume = false;
-        }
         if (isPrepared) {
             if (isVisible()) {
                 onVisible();
@@ -250,6 +237,11 @@ public abstract class LazyDialogFragment extends DialogFragment
         super.onDestroyView();
         isPrepared = false;
         getHttpRequestManager().cancelConetxtRequest(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         if (mComponentContainer != null) {
             mComponentContainer.onDestroy();
         }

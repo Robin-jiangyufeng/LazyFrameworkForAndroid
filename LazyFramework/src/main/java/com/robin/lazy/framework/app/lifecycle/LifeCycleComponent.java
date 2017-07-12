@@ -21,7 +21,7 @@ public interface LifeCycleComponent {
     public void onBecomesTotallyInvisible();
 
     /**
-     * 从不存在到创建后可见状态
+     * 从完全不可见状态变成可见状态
      * like {@link android.app.Activity#onRestart}
      */
     public void onBecomesVisibleFromTotallyInvisible();

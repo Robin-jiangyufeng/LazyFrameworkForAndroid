@@ -16,7 +16,6 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 
-import com.robin.lazy.framework.BuildConfig;
 import com.robin.lazy.framework.app.lifecycle.IComponentContainer;
 import com.robin.lazy.framework.app.lifecycle.LifeCycleComponent;
 import com.robin.lazy.framework.app.lifecycle.LifeCycleComponentManager;
@@ -51,43 +50,30 @@ public abstract class LazyFragment extends Fragment
      */
     private boolean isPrepared;
 
-    /**
-     * 是否第一次执行onResume()方法
-     */
-    private boolean isFirstResume = true;
-
     private Bundle bundle;
 
     @Override
     public void onAttach(Context context) {
-        if(BuildConfig.DEBUG) {
-            LazyLogger.d(getClass().getSimpleName() + " Fragment.onAttach() invoked!!");
-        }
+        LazyLogger.d(getClass().getSimpleName() + " Fragment.onAttach() invoked!!");
         super.onAttach(context);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if(BuildConfig.DEBUG) {
-            LazyLogger.d(getClass().getSimpleName() + " Fragment.onCreate() invoked!!");
-        }
+        LazyLogger.d(getClass().getSimpleName() + " Fragment.onCreate() invoked!!");
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(BuildConfig.DEBUG) {
-            LazyLogger.d(getClass().getSimpleName() + " Fragment.onCreateView() invoked!!");
-        }
+        LazyLogger.d(getClass().getSimpleName() + " Fragment.onCreateView() invoked!!");
         return inflater.inflate(getLayoutId(), container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        if(BuildConfig.DEBUG) {
-            LazyLogger.d(getClass().getSimpleName() + " Fragment.onViewCreated() invoked!!");
-        }
+        LazyLogger.d(getClass().getSimpleName() + " Fragment.onViewCreated() invoked!!");
         super.onViewCreated(view, savedInstanceState);
         initView(savedInstanceState);
         isPrepared = true;
@@ -165,9 +151,7 @@ public abstract class LazyFragment extends Fragment
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        if(BuildConfig.DEBUG) {
-            LazyLogger.d(getClass().getSimpleName() + " Fragment.onActivityCreated() invoked!!");
-        }
+        LazyLogger.d(getClass().getSimpleName() + " Fragment.onActivityCreated() invoked!!");
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -186,18 +170,8 @@ public abstract class LazyFragment extends Fragment
 
     @Override
     public void onResume() {
-        if(BuildConfig.DEBUG) {
-            LazyLogger.d(getClass().getSimpleName() + " Fragment.onResume() invoked!!");
-        }
+        LazyLogger.d(getClass().getSimpleName() + " Fragment.onResume() invoked!!");
         super.onResume();
-        if (!isFirstResume) {
-            if (mComponentContainer != null) {
-                mComponentContainer.onBecomesVisibleFromPartiallyInvisible();
-            }
-        }
-        if (isFirstResume) {
-            isFirstResume = false;
-        }
         if (isPrepared) {
             if (isVisible()) {
                 onVisible();
@@ -209,9 +183,7 @@ public abstract class LazyFragment extends Fragment
 
     @Override
     public void onPause() {
-        if(BuildConfig.DEBUG) {
-            LazyLogger.d(getClass().getSimpleName() + " Fragment.onPause() invoked!!");
-        }
+        LazyLogger.d(getClass().getSimpleName() + " Fragment.onPause() invoked!!");
         super.onPause();
         if (mComponentContainer != null) {
             mComponentContainer.onBecomesPartiallyInvisible();
@@ -220,9 +192,7 @@ public abstract class LazyFragment extends Fragment
 
     @Override
     public void onStop() {
-        if(BuildConfig.DEBUG) {
-            LazyLogger.d(getClass().getSimpleName() + " Fragment.onStop() invoked!!");
-        }
+        LazyLogger.d(getClass().getSimpleName() + " Fragment.onStop() invoked!!");
         super.onStop();
         if (mComponentContainer != null) {
             mComponentContainer.onBecomesTotallyInvisible();
@@ -231,12 +201,15 @@ public abstract class LazyFragment extends Fragment
 
     @Override
     public void onDestroyView() {
-        if(BuildConfig.DEBUG) {
-            LazyLogger.d(getClass().getSimpleName() + " Fragment.onDestroyView() invoked!!");
-        }
+        LazyLogger.d(getClass().getSimpleName() + " Fragment.onDestroyView() invoked!!");
         super.onDestroyView();
         isPrepared = false;
         getHttpRequestManager().cancelConetxtRequest(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         if (mComponentContainer != null) {
             mComponentContainer.onDestroy();
         }
@@ -286,18 +259,20 @@ public abstract class LazyFragment extends Fragment
 
     /**
      * finish掉当前activity
+     *
      * @param resultCode 结果码
-     * @param data 数据
+     * @param data       数据
      */
-    public void finishActivity(int resultCode,Intent data) {
+    public void finishActivity(int resultCode, Intent data) {
         if (getActivity() != null) {
-            getActivity().setResult(resultCode,data);
+            getActivity().setResult(resultCode, data);
         }
         finishActivity();
     }
 
     /**
      * finish掉当前activity
+     *
      * @param resultCode
      */
     public void finishActivity(int resultCode) {
@@ -318,12 +293,13 @@ public abstract class LazyFragment extends Fragment
 
     /**
      * finish掉当前activity(带动画效果的)
+     *
      * @param resultCode 结果码
      * @param data
      */
-    public void finishActivityAfterTransition(int resultCode,Intent data) {
+    public void finishActivityAfterTransition(int resultCode, Intent data) {
         openExitTransition();
-        finishActivity(resultCode,data);
+        finishActivity(resultCode, data);
     }
 
     /***
@@ -372,9 +348,7 @@ public abstract class LazyFragment extends Fragment
      * @see [类、类#方法、类#成员]
      */
     public void onVisible() {
-        if(BuildConfig.DEBUG) {
-            LazyLogger.d(getClass().getSimpleName() + " Fragment.onVisible() invoked!!");
-        }
+        LazyLogger.d(getClass().getSimpleName() + " Fragment.onVisible() invoked!!");
         if (mComponentContainer != null) {
             mComponentContainer.onBecomesVisibleFromPartiallyInvisible();
         }
@@ -388,9 +362,7 @@ public abstract class LazyFragment extends Fragment
      * @see [类、类#方法、类#成员]
      */
     public void onInvisible() {
-        if(BuildConfig.DEBUG) {
-            LazyLogger.d(getClass().getSimpleName() + " Fragment.onInvisible() invoked!!");
-        }
+        LazyLogger.d(getClass().getSimpleName() + " Fragment.onInvisible() invoked!!");
         if (mComponentContainer != null) {
             mComponentContainer.onBecomesPartiallyInvisible();
         }

@@ -1,18 +1,16 @@
 package com.robin.lazy.framework.app.lifecycle;
 
-import android.support.v4.util.LruCache;
-
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class LifeCycleComponentManager implements IComponentContainer {
 
-	/**最大的数量*/
-	private static final int MAX_COUNT = 10;
-	/**内存缓存*/
-    private LruCache<String, LifeCycleComponent> mComponentList;
+    private Map<String, LifeCycleComponent> mComponentList;
 
     public LifeCycleComponentManager() {
+        mComponentList = new HashMap<String, LifeCycleComponent>();
     }
 
     /**
@@ -37,18 +35,16 @@ public class LifeCycleComponentManager implements IComponentContainer {
         }
     }
 
-    public void addComponent(LifeCycleComponent component) {
-        if (component != null) {
-            if (mComponentList == null) {
-                mComponentList = new LruCache<String, LifeCycleComponent>(MAX_COUNT);
-            }
+    public synchronized void addComponent(LifeCycleComponent component) {
+        if (mComponentList != null && component != null) {
             mComponentList.put(component.toString(), component);
         }
     }
 
     /**
-     * 从不存在到创建后可见状态
+     * 从完全不可见状态变成可见状态
      * void
+     *
      * @throws
      * @see [类、类#方法、类#成员]
      */
@@ -58,7 +54,7 @@ public class LifeCycleComponentManager implements IComponentContainer {
             return;
         }
 
-        Iterator<Entry<String, LifeCycleComponent>> it = mComponentList.snapshot().entrySet().iterator();
+        Iterator<Entry<String, LifeCycleComponent>> it = mComponentList.entrySet().iterator();
         while (it.hasNext()) {
             LifeCycleComponent component = it.next().getValue();
             if (component != null) {
@@ -70,6 +66,7 @@ public class LifeCycleComponentManager implements IComponentContainer {
     /**
      * 变成完全不可见状态,就是即将被销毁的状态
      * void
+     *
      * @throws
      * @see [类、类#方法、类#成员]
      */
@@ -77,7 +74,7 @@ public class LifeCycleComponentManager implements IComponentContainer {
         if (mComponentList == null) {
             return;
         }
-        Iterator<Entry<String, LifeCycleComponent>> it = mComponentList.snapshot().entrySet().iterator();
+        Iterator<Entry<String, LifeCycleComponent>> it = mComponentList.entrySet().iterator();
         while (it.hasNext()) {
             LifeCycleComponent component = it.next().getValue();
             if (component != null) {
@@ -89,6 +86,7 @@ public class LifeCycleComponentManager implements IComponentContainer {
     /**
      * 变成不可见状态,但没有被销毁而是处于暂停状态
      * void
+     *
      * @throws
      * @see [类、类#方法、类#成员]
      */
@@ -96,7 +94,7 @@ public class LifeCycleComponentManager implements IComponentContainer {
         if (mComponentList == null) {
             return;
         }
-        Iterator<Entry<String, LifeCycleComponent>> it = mComponentList.snapshot().entrySet().iterator();
+        Iterator<Entry<String, LifeCycleComponent>> it = mComponentList.entrySet().iterator();
         while (it.hasNext()) {
             LifeCycleComponent component = it.next().getValue();
             if (component != null) {
@@ -108,6 +106,7 @@ public class LifeCycleComponentManager implements IComponentContainer {
     /**
      * 从暂停状态变成可见状态的
      * void
+     *
      * @throws
      * @see [类、类#方法、类#成员]
      */
@@ -115,7 +114,7 @@ public class LifeCycleComponentManager implements IComponentContainer {
         if (mComponentList == null) {
             return;
         }
-        Iterator<Entry<String, LifeCycleComponent>> it = mComponentList.snapshot().entrySet().iterator();
+        Iterator<Entry<String, LifeCycleComponent>> it = mComponentList.entrySet().iterator();
         while (it.hasNext()) {
             LifeCycleComponent component = it.next().getValue();
             if (component != null) {
@@ -127,6 +126,7 @@ public class LifeCycleComponentManager implements IComponentContainer {
     /**
      * 活动页被销毁
      * void
+     *
      * @throws
      * @see [类、类#方法、类#成员]
      */
@@ -134,27 +134,14 @@ public class LifeCycleComponentManager implements IComponentContainer {
         if (mComponentList == null) {
             return;
         }
-        Iterator<Entry<String, LifeCycleComponent>> it = mComponentList.snapshot().entrySet().iterator();
+        Iterator<Entry<String, LifeCycleComponent>> it = mComponentList.entrySet().iterator();
         while (it.hasNext()) {
             LifeCycleComponent component = it.next().getValue();
             if (component != null) {
                 component.onDestroy();
             }
         }
-        mComponentList.evictAll();
+        mComponentList.clear();
     }
-    
-    /**
-     * 重置大小
-     * @param maxSize
-     * void
-     * @throws
-     * @see [类、类#方法、类#成员]
-     */
-    public void resize(int maxSize){
-    	if (mComponentList == null) {
-            return;
-        }
-    	mComponentList.resize(maxSize);
-    }
+
 }
