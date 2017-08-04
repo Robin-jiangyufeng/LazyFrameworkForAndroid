@@ -86,6 +86,13 @@ public class LazyApplication extends Application implements CrashHandleListener 
         // 程序创建的时候执行
         LazyLogger.d(" Application.onCreate() invoked!!");
         super.onCreate();
+        initApp();
+    }
+
+    /**
+     * app初始化工作
+     */
+    protected void initApp(){
         initLogger();
         registerUncaughtExceptionHandler();
         initCache();

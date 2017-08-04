@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "0.0.5"
+        versionCode 6
+        versionName "0.0.6"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -36,7 +36,7 @@ ext {
     siteUrl = 'https://github.com/Robin-jiangyufeng/LazyFrameworkForAndroid'
     gitUrl = 'https://github.com/Robin-jiangyufeng/LazyFrameworkForAndroid.git'
 
-    libraryVersion = '0.0.5'
+    libraryVersion = '0.0.6'
 
     developerId = 'jiangyufeng'
     developerName = 'jiangyufeng'
