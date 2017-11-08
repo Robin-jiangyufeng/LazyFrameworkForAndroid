@@ -178,13 +178,6 @@ public abstract class LazyFragment extends Fragment
     public void onResume() {
         LazyLogger.d(getClass().getSimpleName() + " Fragment.onResume() invoked!!");
         super.onResume();
-        if (isPrepared) {
-            if (isVisible()) {
-                onVisible();
-            } else {
-                onInvisible();
-            }
-        }
     }
 
     @Override
