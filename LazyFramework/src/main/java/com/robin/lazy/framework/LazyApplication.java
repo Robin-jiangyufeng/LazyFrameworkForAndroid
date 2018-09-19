@@ -18,16 +18,14 @@ import android.widget.Toast;
 import com.robin.lazy.cache.CacheLoaderManager;
 import com.robin.lazy.cache.disk.naming.HashCodeFileNameGenerator;
 import com.robin.lazy.framework.app.ActivityStackManager;
+import com.robin.lazy.logger.AndroidLogTool;
 import com.robin.lazy.logger.LazyLogger;
-import com.robin.lazy.logger.Log4JTool;
 import com.robin.lazy.logger.LogLevel;
 import com.robin.lazy.logger.PrinterType;
 import com.robin.lazy.net.http.HttpRequestManager;
 import com.robin.lazy.net.http.download.DownloadManager;
 import com.robin.lazy.util.exception.CrashHandleListener;
 import com.robin.lazy.util.exception.CrashHandler;
-
-import org.apache.log4j.Level;
 //                      _oo0oo_
 //                     o8888888o
 //                     88" . "88
@@ -142,7 +140,7 @@ public class LazyApplication extends Application implements CrashHandleListener 
                 .hideThreadInfo() // default shown
                 .logLevel(LogLevel.ALL) // default LogLevel.ALL(设置全局日志等级)
                 .methodOffset(2) // default 0
-                .logTool(/* new AndroidLogTool() */new Log4JTool(Level.ERROR)); // Log4j中的Level与本框架的LogLevel是分开设置的(Level只用来设置log4j的日志等级)
+                .logTool(new AndroidLogTool()/*new Log4JTool(Level.ERROR)*/); // Log4j中的Level与本框架的LogLevel是分开设置的(Level只用来设置log4j的日志等级)
     }
 
     /**
