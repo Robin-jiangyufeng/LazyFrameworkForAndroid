@@ -23,6 +23,6 @@ android {
 }
 
 dependencies {
-    api fileTree(include: ['*.jar'], dir: 'libs')
-    api project(':LazyFramework')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':LazyFramework')
 }
