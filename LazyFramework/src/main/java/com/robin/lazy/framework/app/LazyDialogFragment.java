@@ -564,6 +564,10 @@ public abstract class LazyDialogFragment extends DialogFragment
      * @see [类、类#方法、类#成员]
      */
     public void addValues(String key, Object value) {
+        Bundle arguments=getArguments();
+        if(arguments!=null&&arguments.containsKey(key)){
+            arguments.remove(key);
+        }
         if (bundle == null) {
             bundle = new Bundle();
         }
