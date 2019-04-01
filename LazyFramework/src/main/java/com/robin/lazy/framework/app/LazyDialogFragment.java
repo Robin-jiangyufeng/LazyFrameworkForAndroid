@@ -242,6 +242,7 @@ public abstract class LazyDialogFragment extends DialogFragment
     public void onDestroyView() {
         super.onDestroyView();
         isPrepared = false;
+        dialogWindow=null;
         getHttpRequestManager().cancelConetxtRequest(this);
     }
 
